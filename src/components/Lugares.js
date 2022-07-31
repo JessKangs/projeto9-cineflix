@@ -2,9 +2,40 @@ import { useParams, Link } from "react-router-dom"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import styled from "styled-components"
+import Footer from "./Footer"
+
+function Sit ({seats, index, setId}) {
+    const [select, setSelect] = useState(false)
+    let ids = [];
+
+    function indisponivel () {
+        alert("Este assento não está disponível") 
+    }
+
+    function condicao () {
+    select === false ? setSelect("selected") : setSelect(false)
+
+    
+    ids.push([...ids, seats.id]) //não tá funcionante
+
+    setId(ids)
+    console.log(ids) 
+   
+ }
+
+    return (
+        <Assento 
+        select={select}
+        isAvailable={seats.isAvailable} 
+        key={index} 
+        onClick={seats.isAvailable ? condicao : indisponivel}>
+            <h2 key={index}>{seats.name}</h2>
+        </Assento>
+    )
+}
 
 export default function Lugares () {
-
+   const [dataSits, setDataSits] = useState('')
     const [sits, setSits] = useState([])
     const {idSessao} = useParams()
 
@@ -13,26 +44,19 @@ export default function Lugares () {
 
         request.then(resposta => 
             setSits(resposta.data.seats))
+        
+            request.then(res =>
+                setDataSits(res.data))
 
     }, [])
 
-    const [select, setSelect] = useState(false)
-
-
-    function indisponivel () {
-        alert("Este assento não está disponível")  
-    }
-
-    function condicao () {
-    select === false ? setSelect("selected") : setSelect(false)
- }
-
+    const [id, setId] = useState([])
     const [nome, setNome] = useState('')
     const [cpf, setCpf] = useState('')
 
     function enviar (){
         const body = {
-            ids: [],
+            id,
             nome,
             cpf
         }
@@ -49,13 +73,8 @@ export default function Lugares () {
         <Assentos>
 
             {sits.map((seats, index) =>
-            <Assento 
-            select={select}
-            isAvailable={seats.isAvailable} 
-            key={index} 
-            onClick={seats.isAvailable ? condicao : indisponivel}>
-                <h2 key={index}>{seats.name}</h2>
-            </Assento>)}
+            <Sit seats={seats} index={index} setId={setId}/>
+           )}
 
         </Assentos>
 
@@ -90,7 +109,7 @@ export default function Lugares () {
             <Button onClick={enviar}>Reservar assento(s)</Button>
         </Link>
 
-
+        
         </>
     )
 }
