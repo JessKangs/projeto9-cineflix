@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import styled from "styled-components"
-import Footertwo from './Footer/Footertwo'
+import Footer from './Footer/Footer'
 
 function Sit ({seats, index, setId, id}) {
     const [select, setSelect] = useState(false)
@@ -14,9 +14,6 @@ function Sit ({seats, index, setId, id}) {
     function condicao () {
     select === false ? setSelect("selected") : setSelect(false)
 
-    
-     //não tá funcionante
-     console.log(id)
     setId( select === false ? [...id, seats.id] : id.filter((value, index) => 
     id.indexOf(value) === index && seats.id !== value)
        )
