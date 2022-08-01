@@ -2,11 +2,10 @@ import { useParams, Link } from "react-router-dom"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import styled from "styled-components"
-import Footer from "./Footer"
+import Footer from './Footer/Footer'
 
-function Sit ({seats, index, setId}) {
+function Sit ({seats, index, setId, id}) {
     const [select, setSelect] = useState(false)
-    let ids = [];
 
     function indisponivel () {
         alert("Este assento não está disponível") 
@@ -16,10 +15,12 @@ function Sit ({seats, index, setId}) {
     select === false ? setSelect("selected") : setSelect(false)
 
     
-    ids.push([...ids, seats.id]) //não tá funcionante
+     //não tá funcionante
+     console.log(id)
+    setId( select === false ? [...id, seats.id] : id.filter((value, index) => 
+    id.indexOf(value) === index && seats.id !== value)
+       )
 
-    setId(ids)
-    console.log(ids) 
    
  }
 
@@ -43,25 +44,30 @@ export default function Lugares () {
         const request = axios.get(`https://mock-api.driven.com.br/api/v7/cineflex/showtimes/${idSessao}/seats`)
 
         request.then(resposta => 
+            
             setSits(resposta.data.seats))
-        
-            request.then(res =>
-                setDataSits(res.data))
-
+       
     }, [])
 
+    console.log(dataSits)
+
+   
     const [id, setId] = useState([])
     const [nome, setNome] = useState('')
     const [cpf, setCpf] = useState('')
 
-    function enviar (){
+    function enviar (e){
+
+        e.prevent.default();
+
         const body = {
             id,
             nome,
             cpf
         }
 
-        axios.post('https://mock-api.driven.com.br/api/v7/cineflex/seats/book-many', body)
+        console.log(body)
+         nome.length !== 0 && cpf.length !== 0 && id.length !== 0 ? console.log("funciona")  : alert("Preencha os campos do formulário corretamente!") 
 
     }
     return (
@@ -73,7 +79,7 @@ export default function Lugares () {
         <Assentos>
 
             {sits.map((seats, index) =>
-            <Sit seats={seats} index={index} setId={setId}/>
+            <Sit seats={seats} index={index} setId={setId} id={id}/>
            )}
 
         </Assentos>
@@ -96,7 +102,7 @@ export default function Lugares () {
         </Disponibilidade>
 
         <Form>
-            <form>
+            <form onSubmit={enviar}>
                 <label>Nome do comprador:</label>
                 <input onChange={(e) => setNome(e.target.value)} placeholder="Digite seu nome..." required value={nome}/>
 
@@ -105,10 +111,16 @@ export default function Lugares () {
             </form>
         </Form>
 
-        <Link to="/sucesso">
-            <Button onClick={enviar}>Reservar assento(s)</Button>
-        </Link>
+            <Link to="/sucesso">
+                <Button type="submit">Reservar assento(s)</Button>
+            </Link>
+       
 
+        {/* <Footer 
+        title={dataSits.movie.title} 
+        posterURL={dataSits.movie.posterURL} 
+        time={dataSits.name} 
+        weekday={dataSits.day.weekday}  />  */}
         
         </>
     )

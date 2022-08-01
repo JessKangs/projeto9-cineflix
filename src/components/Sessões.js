@@ -4,7 +4,7 @@ import styled from "styled-components"
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-import Footer from "./Footer";
+import Footer from "./Footer/Footer";
 
 
 export default function Sessões ({filmes}) {
@@ -34,7 +34,7 @@ export default function Sessões ({filmes}) {
                 <Botões>
                 {session.showtimes.map((time, index) => 
                 <Link to={`/lugares/${time.id}`}>
-                    < TimeButton key={index}>
+                    < TimeButton key={index} styled={{textDecoration: "none"}}>
                     {time.name}
                     </TimeButton>
                 </Link>
@@ -44,7 +44,7 @@ export default function Sessões ({filmes}) {
             </SessionTime>
             ): ''}
 
-            <Footer data={data} />
+            <Footer posterURL={data.posterURL} title={data.title} />
 
         </>
     )

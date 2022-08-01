@@ -1,15 +1,18 @@
 import styled from "styled-components"
 
-export default function Footer ({data}) {
+export default function Footer ({posterURL, title, time, weekday}) {
     return (
         <>
         
             <StatusBottom>
-                <BottomMovieCard>
-                    <img src={data.posterURL} alt="" />
+               
+               <BottomMovieCard>
+                    <img src={posterURL} alt="poster do filme" />
                 </BottomMovieCard>
-                <h2>{data.title}</h2>
-                <h2>{}</h2>
+                <Data>
+                <h2>{title}</h2>
+                <h2>{weekday} - {time}</h2>
+               </Data>
             </StatusBottom>
         </>
     )
@@ -44,4 +47,12 @@ const BottomMovieCard = styled.div`
     display: flex;
     justify-content: center;
     font-size: 26px;
+    background-color: white;
 `
+
+const Data = styled.div`
+    height: 58px;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+    `
