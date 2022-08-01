@@ -19,8 +19,6 @@ export default function Sessões ({filmes}) {
             })
     }, [])
 
-    console.log(data)
-
     return (
         <>
             <Instruções>

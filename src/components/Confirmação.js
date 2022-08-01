@@ -3,10 +3,9 @@ import {Link} from "react-router-dom"
 
 export default function Confirmação ({pedidoInfo, usuInfo}) {
 
+    //console.log(pedidoInfo)
+    //console.log(usuInfo.body.id)
     
-
-    console.log(pedidoInfo)
-    console.log(usuInfo)
     return (
         <>
        

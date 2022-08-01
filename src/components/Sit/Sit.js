@@ -1,7 +1,7 @@
 import styled from "styled-components"
 import { useState } from "react"
 
-export default function Sit ({seats, index, setId, id, sitNum, setSitNum}) {
+export default function Sit ({seats, index, setIds, ids, sitNum, setSitNum}) {
     const [select, setSelect] = useState(false)
 
     function indisponivel () {
@@ -11,15 +11,14 @@ export default function Sit ({seats, index, setId, id, sitNum, setSitNum}) {
     function condicao () {
     select === false ? setSelect("selected") : setSelect(false)
 
-    setId( select === false ? [...id, seats.id] : id.filter((value, index) => 
-    id.indexOf(value) === index && seats.id !== value)
+    setIds( select === false ? [...ids, seats.id] : ids.filter((value, index) => 
+    ids.indexOf(value) === index && seats.id !== value)
        )
 
     setSitNum( select === false ? [...sitNum, seats.name] : sitNum.filter((value, index) => 
     sitNum.indexOf(value) === index && seats.name !== value)
       )
 
-   console.log(id)
  }
 
     return (

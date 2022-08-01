@@ -32,8 +32,8 @@ export default function Lugares ({pedidoData, usuData}) {
 
     //console.log(dataSits)
    
-    const [id, setId] = useState([])
-    const [nome, setNome] = useState('')
+    const [ids, setIds] = useState([])
+    const [name, setName] = useState('')
     const [cpf, setCpf] = useState('')
 
     function enviar (e){
@@ -41,14 +41,16 @@ export default function Lugares ({pedidoData, usuData}) {
         e.preventDefault();
 
         const body = {
-            id,
-            nome,
+            ids,
+            name,
             cpf
         }
 
-        console.log(body)
-        console.log(id)
-        if ( id.length !== 0 ) {
+        //console.log(body)
+        //console.log(id)
+
+        if ( ids.length !== 0 ) {
+
             axios.post("https://mock-api.driven.com.br/api/v7/cineflex/seats/book-many", body)
             usuData(body, sitNum)
             navigate("/sucesso") 
@@ -56,6 +58,8 @@ export default function Lugares ({pedidoData, usuData}) {
         alert("Preencha os campos do formulário corretamente!")}
 
     }
+
+    
 
     return (
         <>
@@ -66,7 +70,7 @@ export default function Lugares ({pedidoData, usuData}) {
         <Assentos>
 
             {sits.map((seats, index) =>
-            <Sit seats={seats} index={index} setId={setId} id={id} setSitNum={setSitNum} sitNum={sitNum}/>
+            <Sit seats={seats} index={index} setIds={setIds} ids={ids} setSitNum={setSitNum} sitNum={sitNum}/>
            )}
 
         </Assentos>
@@ -92,7 +96,7 @@ export default function Lugares ({pedidoData, usuData}) {
 
             <form onSubmit={enviar}>
                 <label>Nome do comprador:</label>
-                <input onChange={(e) => setNome(e.target.value)} placeholder="Digite seu nome..." required value={nome}/>
+                <input onChange={(e) => setName(e.target.value)} placeholder="Digite seu nome..." required value={name}/>
 
                 <label>CPF do comprador:</label>
                 <input onChange={(e) => setCpf(e.target.value)} placeholder="Digite seu cpf..." required value={cpf}/>
