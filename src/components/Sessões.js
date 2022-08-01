@@ -34,7 +34,7 @@ export default function Sessões ({filmes}) {
                 <Botões>
                 {session.showtimes.map((time, index) => 
                 <Link to={`/lugares/${time.id}`}>
-                    < TimeButton key={index} styled={{textDecoration: "none"}}>
+                    < TimeButton key={index}>
                     {time.name}
                     </TimeButton>
                 </Link>
@@ -83,13 +83,13 @@ const TimeButton = styled.button`
     display:flex;
     align-items: center;
     justify-content: center;
-    text-decoration: none;
 
-    a {
-        text-decoration: none;
-    }
 `
 const Botões = styled.div`
     display: flex;
     flex-direction: row;
+
+    a {
+        text-decoration: none;
+    }
 `

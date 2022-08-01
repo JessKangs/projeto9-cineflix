@@ -25,6 +25,16 @@ export default function App () {
         });
     }, []);
     
+    const [pedidoInfo, setPedidoInfo] = useState('')
+    const [usuInfo, setUsuInfo] = useState('')
+
+    function pedidoData (dataSits) {
+        setPedidoInfo(dataSits)
+    }
+
+    function usuData (body, sitNum) {
+        setUsuInfo({body: body, nome: sitNum})
+    }
  
    
 return (
@@ -39,9 +49,9 @@ return (
 
         <Route path="sessoes/:idFilme" element={<Sessions filmes={filmes}/>}/>
 
-        <Route path="lugares/:idSessao" element={<Lugares filmes={filmes}/>}/>
+        <Route path="lugares/:idSessao" element={<Lugares pedidoData={pedidoData} usuData={usuData} filmes={filmes}/>}/>
 
-        <Route path="/sucesso" element={<Confirmação />} /> 
+        <Route path="/sucesso" element={<Confirmação pedidoInfo={pedidoInfo} usuInfo={usuInfo} />} /> 
         </Routes>
 
 

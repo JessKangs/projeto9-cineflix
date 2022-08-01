@@ -1,58 +1,36 @@
 import { useParams, Link } from "react-router-dom"
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import axios from "axios"
 import styled from "styled-components"
 import Footer from './Footer/Footer'
+import Sit from "./Sit/Sit"
 
-function Sit ({seats, index, setId, id}) {
-    const [select, setSelect] = useState(false)
 
-    function indisponivel () {
-        alert("Este assento não está disponível") 
-    }
+export default function Lugares ({pedidoData, usuData}) {   
+    
+    let navigate = useNavigate()
 
-    function condicao () {
-    select === false ? setSelect("selected") : setSelect(false)
-
-    setId( select === false ? [...id, seats.id] : id.filter((value, index) => 
-    id.indexOf(value) === index && seats.id !== value)
-       )
-
-   
- }
-
-    return (
-        <Assento 
-        select={select}
-        isAvailable={seats.isAvailable} 
-        key={index} 
-        onClick={seats.isAvailable ? condicao : indisponivel}>
-            <h2 key={index}>{seats.name}</h2>
-        </Assento>
-    )
-}
-
-export default function Lugares () {
-   const [dataSits, setDataSits] = useState('')
+    const [sitNum, setSitNum] = useState([])
+    const [dataSits, setDataSits] = useState('')
     const [sits, setSits] = useState([])
     const {idSessao} = useParams()
+
+    if( dataSits !== '') {pedidoData(dataSits)}
 
     useEffect(() => {
         const request = axios.get(`https://mock-api.driven.com.br/api/v7/cineflex/showtimes/${idSessao}/seats`)
 
         request.then(resposta => 
             
-            {setSits(resposta.data.seats)
-            setDataSits(resposta.data)
-            }
-            )
-
-            
-            
+            {
+                setSits(resposta.data.seats)
+                setDataSits(resposta.data)
+            })
+        
     }, [])
 
-    console.log(dataSits)
-
+    //console.log(dataSits)
    
     const [id, setId] = useState([])
     const [nome, setNome] = useState('')
@@ -60,7 +38,7 @@ export default function Lugares () {
 
     function enviar (e){
 
-        e.prevent.default();
+        e.preventDefault();
 
         const body = {
             id,
@@ -69,9 +47,16 @@ export default function Lugares () {
         }
 
         console.log(body)
-         nome.length !== 0 && cpf.length !== 0 && id.length !== 0 ? console.log("funciona")  : alert("Preencha os campos do formulário corretamente!") 
+        console.log(id)
+        if ( id.length !== 0 ) {
+            axios.post("https://mock-api.driven.com.br/api/v7/cineflex/seats/book-many", body)
+            usuData(body, sitNum)
+            navigate("/sucesso") 
+        } else { 
+        alert("Preencha os campos do formulário corretamente!")}
 
     }
+
     return (
         <>
         <Instruções>
@@ -81,7 +66,7 @@ export default function Lugares () {
         <Assentos>
 
             {sits.map((seats, index) =>
-            <Sit seats={seats} index={index} setId={setId} id={id}/>
+            <Sit seats={seats} index={index} setId={setId} id={id} setSitNum={setSitNum} sitNum={sitNum}/>
            )}
 
         </Assentos>
@@ -104,25 +89,30 @@ export default function Lugares () {
         </Disponibilidade>
 
         <Form>
+
             <form onSubmit={enviar}>
                 <label>Nome do comprador:</label>
                 <input onChange={(e) => setNome(e.target.value)} placeholder="Digite seu nome..." required value={nome}/>
 
                 <label>CPF do comprador:</label>
                 <input onChange={(e) => setCpf(e.target.value)} placeholder="Digite seu cpf..." required value={cpf}/>
+
+                
+                <Button type="submit">Reservar assento(s)</Button>
+            
+
             </form>
         </Form>
 
-            <Link to="/sucesso">
-                <Button type="submit">Reservar assento(s)</Button>
-            </Link>
+        
+            
        
 
-        <Footer 
+        {dataSits === '' ? '' : <Footer 
         title={dataSits.movie.title} 
         posterURL={dataSits.movie.posterURL} 
         time={dataSits.name} 
-        weekday={dataSits.day.weekday}  /> 
+        weekday={dataSits.day.weekday}  /> }
         
         </>
     )
@@ -143,26 +133,6 @@ const Assentos = styled.div`
     width: 400px;
     flex-wrap: wrap;
     margin: 0 5px;
-`
-
-const Assento = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 26px;
-    height: 25px;
-    font-size: 12px;
-    margin-right: 10px;
-    margin-bottom: 18px;
-    border-radius: 50%;
-    border: 1px solid ${(props) =>  
-        props.select === 'selected' && props.isAvailable ? '#1AAE9E' :
-        props.isAvailable === false ? '#F7C52B' : 
-        props.isAvailable === true ? '#808F9D' :'' };
-    background-color: ${props => 
-        props.select === 'selected' && props.isAvailable ? '#8DD7CF' :
-        props.isAvailable === false ? '#FBE192' : 
-        props.isAvailable ? '#C3CFD9' : ''};
 `
 
 const Disponibilidade = styled.div`
@@ -219,6 +189,9 @@ const Form = styled.div`
     flex-wrap: wrap;
     justify-content: space-between;
     flex-direction: column;
+    margin-bottom: 150px;
+    box-sizing: border-box;
+    
     }
 
     form > input {
@@ -226,6 +199,8 @@ const Form = styled.div`
         height: 51px;
         border-radius: 3px;
         border: none;
+        margin: 10px 0 10px 0;
+        box-sizing: border-box;
     }
 
     input::placeholder {
@@ -242,5 +217,6 @@ const Button = styled.button`
     border-radius: 3px;
     border: none;
     font-size: 18px;
-    margin: 57px 20% 30px 20%;
+    margin: 10px 20% 0px 20%;
+    box-sizing: border-box;
     `

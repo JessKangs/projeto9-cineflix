@@ -1,7 +1,12 @@
 import styled from "styled-components"
 import {Link} from "react-router-dom"
 
-export default function Confirmação () {
+export default function Confirmação ({pedidoInfo, usuInfo}) {
+
+    
+
+    console.log(pedidoInfo)
+    console.log(usuInfo)
     return (
         <>
        
@@ -11,20 +16,20 @@ export default function Confirmação () {
  
          <Item>
              <h1>Filme e sessão</h1>
-             <h2></h2>
-             <h2></h2>
+             <h2>{pedidoInfo.movie.title}</h2>
+             <h2> {pedidoInfo.day.date} {pedidoInfo.name} </h2>
          </Item>
         
          <Item>
              <h1>Ingressos</h1>
-             <h2></h2>
-             <h2></h2>
+             {usuInfo.nome.map((value, index) =>
+                <h2>Assento {value}</h2>)}
          </Item>
  
          <Item>
              <h1>Comprador</h1>
-             <h2></h2>
-             <h2></h2>
+             <h2>Nome: {usuInfo.body.nome}</h2>
+             <h2>CPF: {usuInfo.body.cpf}</h2>
          </Item>
         
         <Link to="/"><Button>Voltar pra Home</Button></Link>
@@ -45,10 +50,18 @@ const Instruções = styled.div`
 `
 
 const Item = styled.div`
+    margin-top: 30px;
+    margin-left: 35px;
     
 
     h1 {
         font-weight: bold;
+        font-size: 24px;
+    }
+
+    h2 {
+        font-size: 22px;
+        margin-top: 10px;
     }
     `
 
