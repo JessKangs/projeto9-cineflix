@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import styled from "styled-components"
-import Footer from './Footer/Footer'
+import Footertwo from './Footer/Footertwo'
 
 function Sit ({seats, index, setId, id}) {
     const [select, setSelect] = useState(false)
@@ -45,8 +45,13 @@ export default function Lugares () {
 
         request.then(resposta => 
             
-            setSits(resposta.data.seats))
-       
+            {setSits(resposta.data.seats)
+            setDataSits(resposta.data)
+            }
+            )
+
+            
+            
     }, [])
 
     console.log(dataSits)
@@ -116,11 +121,11 @@ export default function Lugares () {
             </Link>
        
 
-        {/* <Footer 
+        <Footer 
         title={dataSits.movie.title} 
         posterURL={dataSits.movie.posterURL} 
         time={dataSits.name} 
-        weekday={dataSits.day.weekday}  />  */}
+        weekday={dataSits.day.weekday}  /> 
         
         </>
     )
